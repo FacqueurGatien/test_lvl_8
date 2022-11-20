@@ -24,6 +24,7 @@ namespace TestRedLine
             Generation_GroupBox();
 
         }
+        //TODO Creation d'une GroupBox de base (sans nom de variable du coup elle sera assigné au tableLayoutPanel automatiquement)
         public GroupBox CloneGb(int i)
         {
             ComboBox cbClone = CloneComboBox(i);
@@ -38,6 +39,7 @@ namespace TestRedLine
             gbClone.Enter += new System.EventHandler(this.groupBox1_Enter);
             return gbClone;
         }
+        //TODO Creation d'une ComboBox de base (sans nom de variable du coup elle sera assigné a la groupBox créer automatiquement)
         public ComboBox CloneComboBox(int i)
         {
             ComboBox cbClone = new ComboBox();
@@ -57,6 +59,8 @@ namespace TestRedLine
             cbClone.SelectedIndexChanged += new System.EventHandler(this.cbCouleurJoueur1_SelectedIndexChanged);
             return cbClone;
         }
+
+        //TODO Creation d'une textBox de base (sans nom de variable du coup elle sera assigné a la groupBox créer automatiquement)
         public TextBox CloneTextBox(int i)
         {
             TextBox tbClone = new TextBox();
@@ -64,12 +68,14 @@ namespace TestRedLine
             tbClone.Name = "tbPseudoJoueur"+(i+1);
             tbClone.PlaceholderText = "Pseudo";
             tbClone.Size = new System.Drawing.Size(132, 23);
+            tbClone.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             return tbClone;
         }
+        //TODO Generation automatique en fonction du nombre de joueur selmectionné
         private void Generation_GroupBox()
         {
 
-            for(int i = 1; i<taille;i++)
+            for(int i = 0; i<taille;i++)
             {
                 GroupBox gbClone = CloneGb(i);
                 if (i>2)
@@ -113,9 +119,50 @@ namespace TestRedLine
 
         }
 
+        //TODO Pour faire la verification sur chaque textbox des qu'il est modifier
+        /// <summary>
+        /// Changer l'etat du bouton valider (Enable true or false) des que les textBox sont edité
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            TextBox tbJoueur = sender as TextBox;
+            GroupBox gbPlateau = (GroupBox)tbJoueur.Parent;
+            TableLayoutPanel Plateau = (TableLayoutPanel)gbPlateau.Parent;
+            bool resulttest = true;
+            foreach (object gb in Plateau.Controls)
+            {
+                if (gb is GroupBox)
+                {
+                    GroupBox gbtest = (GroupBox)gb;
+                    foreach (object tb in gbtest.Controls)
+                    {
+                        if (tb is TextBox)
+                        {
+                            TextBox tbtest = (TextBox)tb;
+                            if (tbtest.Text == "")
+                            {
+                                resulttest = false;
+                            }
+                        }
+                    }
+                }
+            }
+            if (resulttest)
+            {
+                bValiderJoueurs.Enabled = true;
+            }
+            else
+            {
+                bValiderJoueurs.Enabled = false;
+            }
+        }
+
+        //TODO Affiche un changement de couleur juste pour test 
         private void bValiderJoueurs_Click(object sender, EventArgs e)
         {
-
+            tableLayoutPanel1.BackColor = Color.Beige;
         }
 
         private void cbCouleurJoueur1_SelectedIndexChanged(object sender, EventArgs e)
